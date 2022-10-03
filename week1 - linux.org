@@ -1,0 +1,264 @@
+#+TITLE:  MCE330 - Week 1 - Introduction to Linux
+
+
+* Directories
+What you normally know as "folders" in other operating systems are called "directories" in Linux.
+Each operating system comes with a fixed set of directories to properly function.
+For example, Windows has the "C:/Windows" folder.
+Similarly, there are fixed directories in Linux for the proper functioning of the operating system.
+These directories are organized in a simple tree.
+#  (progn (setq org-image-actual-width 500)(org-display-inline-images))
+[[./img/linux_file_system.png]]
+
+- "/": The root of the directory tree. 
+- "/bin": essential user binaries (programs)
+- "/sbin": essential system binaries.
+- "/usr": more user binaries and files
+- "/boot": files needed to boot the system
+- "/dev": a number of special files that represent devices.
+- "/etc": configuration files
+- "/lib": libraries needed by the binaries in the /bin and /sbin
+- "/home": user data, this is where we put our stuff
+
+When we install a program on Linux, it automatically goes to one of the binary folders.
+We do not track where it goes. Instead, we let the package manager handle it.
+
+User files are always stored under the /home/yourname directory.
+
+*Navigating Directories:*
+pwd: print working directory
+#+BEGIN_SRC bash
+pwd
+#+END_SRC
+
+You can change your directory using the cd command. For example, you can go to the root.
+#+BEGIN_SRC bash
+cd /
+#+END_SRC
+
+The contents of a directory can be displayed using the ls command, which stands for "list structure".
+#+BEGIN_SRC bash
+ls
+#+END_SRC
+
+You can navigate into a directory that is under your current directory simply by writing its name.
+#+BEGIN_SRC bash
+cd home
+#+END_SRC
+
+This is the same as doing:
+#+BEGIN_SRC bash
+cd /home
+#+END_SRC
+
+Writing "cd" without any argument brings you to your own user directory
+#+BEGIN_SRC bash
+cd
+pwd
+#+END_SRC
+
+You should see something like /home/mce330, where "mce300" is the name of the user on the computer you are using.
+
+In each directory, there are special directories named "." an "..".
+We can see them if we list all the directories, using "ls -a".
+Here, the switch "-a" means ALL.
+#+BEGIN_SRC bash
+ls -a
+#+END_SRC
+
+The directories "." and ".." have a special meaning.
+- "." means the current directory
+- ".." means the previous directory in the tree
+
+For example, to get out of your current directory, you can use:
+#+BEGIN_SRC bash
+cd ..
+#+END_SRC
+
+You can get back to your home directory
+#+BEGIN_SRC bash
+cd 
+#+END_SRC
+
+*Working with Directories:*
+We can create directories using the mkdir command
+#+BEGIN_SRC bash
+mkdir mydirectory 
+#+END_SRC
+
+To create a directory inside this directory, we can get into it
+#+BEGIN_SRC bash
+cd mydirectory
+mkdir innerdirectory
+#+END_SRC
+
+Directories can be moved using the mv (mv) command
+#+BEGIN_SRC bash
+mv innerdirectory/ ../nowouterdirectory/
+#+END_SRC
+
+This moves the inner directory to a relative path "../" (outer directory) and renames it to a new name.
+Since mv can be used to rename directories too, we do not have a seperate command to rename.
+We can just move stuff in place.
+#+BEGIN_SRC bash
+mkdir firstname
+mv firstname/ secondname/
+#+END_SRC
+
+Directories can be deleted using either rmdir or rm commands.
+The prefferred way of doing this is to use the "rm -r" command.
+#+BEGIN_SRC bash
+rm -r secondname
+#+END_SRC
+
+Directories can have other directories and files in them. This is why we have to tell the command to delete them recursively.
+To do so, we specify the "-r" flag.
+
+* Files
+Most of the files we use on Linux are simple text files.
+Text files can have many extensions, such as ".txt, .py, .c, .cpp, .xml, ...".
+These extensions do not alter the contents of the file. A simple text file is always a simple text file.
+
+We can create empty text files using the touch command.
+#+BEGIN_SRC bash
+cd
+touch myfile.txt
+#+END_SRC
+
+To edit files, we can use the editor of our choice.
+In this course, we will use the "Visual Studio Code".
+The command "code" starts the Visual Studio Code.
+To start it and open our file, we simply provide the name of the file as an argument.
+#+BEGIN_SRC bash
+code myfile.txt
+#+END_SRC
+
+Write something into the file and save it.
+
+If your machine doesn't have Visual Studio Code, you can install it using
+#+BEGIN_SRC bash
+sudo snap install --classic code 
+#+END_SRC
+
+
+The contents of a file can be displayed in the terminal using the cat command.
+#+BEGIN_SRC bash
+cat myfile.txt
+#+END_SRC
+
+* Executables
+The command "code" finds and executes a certain binary.
+This is where the Visual Studio Code is actually installed.
+We can find this information by using the "which" command.
+#+BEGIN_SRC bash
+which code
+#+END_SRC
+
+How is it that the computer was able to find the actual binary without us providing it?
+Here is how it works. When you enter a command into the terminal, it searches a list of directories to see if there is any matching program.
+The list of directories searched during this process is stored in a variable called "PATH".
+The contents of this variable can be shown as follows:
+#+BEGIN_SRC bash
+echo $PATH$
+#+END_SRC
+
+For example, "python3" is a program in our computer that interpretes the python code.
+Here is the binary for it.
+#+BEGIN_SRC bash
+which python3
+#+END_SRC
+
+It is probably somewhere in the /usr/bin directory. This is where non-essential user binaries are stored.
+Navigate to the directory and display its contents.
+#+BEGIN_SRC bash
+cd /usr/bin
+ls 
+#+END_SRC
+
+You will see many executables here.
+
+*Permissions:*
+There are three types of permissions: Read(r), Write(w) and Executable (x)
+There are three groups that can have permissions: user - group - other
+We are the user on our machines.
+
+The file permissions for the user, group and other are displayed using 3 characters.
+- r-- : only read
+- rw- : read & write
+- rwx : read, write & execute
+
+When you put them for the user, group and the other you get a somewhat complicated looking string.
+We can display the permissions of the files using the "-l" (long) switch in ls.
+#+BEGIN_SRC bash
+ls -l
+#+END_SRC
+
+You will see that these executables all have "rwx" permissions for the user.
+The "x" at the end is what allows them to be called as programs.
+
+* Scripts
+Text files can include arbitrary text, including source code.
+For example, we can create a simple text file with a python statement in it.
+#+BEGIN_SRC bash
+cd
+touch myscript.py
+code myscript.py
+#+END_SRC
+
+Inside the file, write a simple hello world statement.
+#+BEGIN_SRC python
+print("Hello World")
+#+END_SRC
+
+We can call the python interpreter to execute this file for us.
+#+BEGIN_SRC bash
+python3 myscript.py
+#+END_SRC
+
+This statement calls the "python3" interpreter to execute the statement in the text file.
+
+As a shorcut, the text file can be turned into an executable.
+Text files that are turned into executables are called "scripts".
+To create a script, we first specifiy with which interpreter it should be executed with.
+To do so, we add a special line at the very top of the file.
+Edit the text file to look as follows:
+
+#+BEGIN_SRC python
+#!/usr/bin/python3
+print("Hello World")
+#+END_SRC
+
+The first line tells the terminal that this file is to be interpreted using the binary located at /usr/bin/python3.
+Notice, this is the full path of the python3 interpreter.
+Let's check the permissions of our file.
+#+BEGIN_SRC bash
+ls -l
+#+END_SRC
+
+You will see that myscript.py only has rw- permission.
+To be able to execute it, we change its mode using "chmod" and add executability (+x).
+#+BEGIN_SRC bash
+chmod +x myscript.py
+ls -l 
+#+END_SRC
+
+Now, it should also have the permission "rwx".
+Finally, we can run it as if it is an executable in our current directory.
+If we were to just type its name "myscript.py", the shell would go looking into our path.
+Our current directory is not in the path.
+Consequently, we have to tell the computer that we are trying to run the script that is located inside our current directory.
+Remember the special directory "." ? This is how we use it:
+#+BEGIN_SRC bash
+./myscript.py
+#+END_SRC
+
+
+* Task
+- Create a directory called "task1" in your home directory.
+- Create a python script called "task1.py" in it.
+- Print " MCE330 Task 1 - <Your Name> , <Student Number> \n"
+- Make it executable and run it.
+
+
+
+
