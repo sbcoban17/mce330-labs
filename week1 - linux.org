@@ -259,6 +259,9 @@ Remember the special directory "." ? This is how we use it:
 - Print " MCE330 Task 1 - <Your Name> , <Student Number> \n"
 - Make it executable and run it.
 
+If it works, call the instructor to your desk to get your score.
+Also, upload a screenshot of the terminal to the Blackboard.
+
 
 
 
